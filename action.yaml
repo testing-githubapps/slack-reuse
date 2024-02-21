@@ -1,3 +1,15 @@
+---
+name: Slack Notifications
+description: "Slack Notification for pipeline updates"
+inputs: 
+    channel-id: 
+        description: "ID of channel to sent notification to."
+        required: true
+    pipeline-name:
+        description: "Name of pipeline for slack message"
+        required: true
+
+    
     - name: Post to a Slack channel
       id: slack
       uses: slackapi/slack-github-action@v1.24.0
@@ -5,8 +17,8 @@
         # Slack channel id, channel name, or user id to post message.
         # See also: https://api.slack.com/methods/chat.postMessage#channels
         # You can pass in multiple channels to post to by providing a comma-delimited list of channel IDs.
-        channel-id: C06B5R1CUDS
+        channel-id: ${{ input.channel-id }}
         # For posting a simple plain text message
-        slack-message: "gha_runner_rush_integration_test build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+        slack-message: "${{ input.pipeline-name }} build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
       env:
         SLACK_BOT_TOKEN: ${{ secrets.SLACK_HZ_BOT_TOKEN }}
