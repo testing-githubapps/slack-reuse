@@ -9,16 +9,14 @@ inputs:
         description: "Name of pipeline for slack message"
         required: true
 
-    
+ runs:
+    using: "composite"
+    steps:
     - name: Post to a Slack channel
       id: slack
       uses: slackapi/slack-github-action@v1.24.0
       with:
-        # Slack channel id, channel name, or user id to post message.
-        # See also: https://api.slack.com/methods/chat.postMessage#channels
-        # You can pass in multiple channels to post to by providing a comma-delimited list of channel IDs.
-        channel-id: ${{ input.channel-id }}
-        # For posting a simple plain text message
-        slack-message: "${{ input.pipeline-name }} build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+        channel-id: ${{ inputs.channel-id }}
+        slack-message: "${{ inputs.pipeline-name }} build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
       env:
-        SLACK_BOT_TOKEN: ${{ secrets.SLACK_HZ_BOT_TOKEN }}
+        SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
